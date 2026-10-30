@@ -81,6 +81,6 @@ khatm60/
 
 ## 👤 Author
 
-**Hashim Abdul Rashid**: [@Hashrash-dev](https://github.com/Hashrash-dev) · [Hashimabdul9@gmail.com](mailto:Hashimabdul9@gmail.com)
+**Hashim Abdul**: [@Hashrash-dev](https://github.com/Hashrash-dev)
 
 If you find this useful, please consider giving the repo a ⭐.
