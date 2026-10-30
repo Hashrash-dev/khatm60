@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>60-Day Quran Khatm</title>
+<meta name="description" content="Read and listen to the whole Quran in 60 days, half a juz a day in two sittings.">
+<meta name="theme-color" content="#1f6f54">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Khatm 60">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1d2a24;--muted:#5d6b64;--line:#e3e8e5;--bg:#f7f5ef;--accent:#1f6f54;--safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  body.reading{overflow:hidden}
+  button,select{font-family:inherit}
+  .wrap{max-width:820px;margin:0 auto;padding:calc(16px + var(--safe-t)) 14px calc(40px + var(--safe-b))}
+  header{text-align:center;padding:6px 0 2px}
+  .ar{font-family:Amiri,serif;font-size:30px;color:var(--accent);margin:0 0 2px}
+  h1{font-size:22px;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:14px;line-height:1.5;margin:0}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+  .card h2{font-size:15px;margin:0 0 8px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+  .stats b{display:block;font-size:22px;color:var(--accent)}
+  .stats span{font-size:12px;color:var(--muted)}
+  .bar{height:10px;background:#eef1ef;border-radius:99px;overflow:hidden;margin-top:12px}
+  .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+  .next{font-size:14px;line-height:1.5}
+  .next .big{font-size:18px;font-weight:700}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:12px;padding:11px 16px;font:600 14px Inter,sans-serif;color:#fff;background:var(--accent);cursor:pointer}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .btnrow .btn{flex:1;min-width:140px}
+  .field{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+  .field:first-of-type{border-top:0}
+  .field select{max-width:62%;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:14px;color:var(--ink)}
+  .switch{position:relative;width:44px;height:26px;flex:none}
+  .switch input{opacity:0;width:0;height:0}
+  .switch span{position:absolute;inset:0;background:#cfd8d3;border-radius:99px;transition:.2s}
+  .switch span::after{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked+span{background:var(--accent)}
+  .switch input:checked+span::after{transform:translateX(18px)}
+  .how{font-size:13px;color:var(--muted);line-height:1.55;margin:0;padding-left:18px}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 8px}
+  .filters button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font:500 13px Inter,sans-serif;color:var(--ink);cursor:pointer}
+  .filters button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .day{display:grid;grid-template-columns:54px 1fr;border-radius:12px;margin:8px 0;overflow:hidden;border:1px solid rgba(0,0,0,.06);background:#fff}
+  .day .num{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;padding:8px 0}
+  .day .num small{font-size:10px;font-weight:500;opacity:.9;letter-spacing:.04em}
+  .day .body{padding:10px 12px}
+  .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .dname{font-weight:700;font-size:14px}
+  .meta{font-size:12px;color:var(--muted)}
+  .pages{font-size:13px;margin:3px 0 8px}
+  .sess{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .col{display:flex;flex-direction:column;gap:6px}
+  .sess label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer;font-size:13px;user-select:none;background:#fff}
+  .sess label input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:none}
+  .sess label .t{line-height:1.25;flex:1}
+  .sess label .t small{display:block;color:var(--muted);font-size:11px}
+  .sess label.done{background:#eef6f2;border-color:#bcd9cb}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+  .chips button{min-width:34px;padding:6px 7px;border-radius:8px;border:0;font:600 12px Inter,sans-serif;color:#fff;cursor:pointer}
+  .chips button.play{min-width:auto;padding:6px 9px}
+  .day.complete{opacity:.75}
+  .day.complete .dname::after{content:" ✓";color:var(--accent)}
+  .day.is-next{outline:2px solid var(--accent);outline-offset:1px}
+  .note{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-height:1.5}
+
+  /* Reader */
+  #reader{position:fixed;inset:0;background:#fbfaf6;z-index:50;display:none;flex-direction:column}
+  #reader.open{display:flex}
+  .rhead{display:flex;align-items:center;gap:10px;padding:calc(10px + var(--safe-t)) 12px 10px;color:#fff;flex:none}
+  .rhead .rt{flex:1;min-width:0}
+  .rhead .rt b{display:block;font-size:15px}
+  .rhead .rt span{font-size:12px;opacity:.9}
+  .rhead button{background:rgba(255,255,255,.22);color:#fff;border:0;border-radius:10px;padding:9px 12px;font:600 14px Inter,sans-serif;cursor:pointer}
+  .rbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 8px 20px}
+  .pg{max-width:620px;margin:0 auto 14px;border-radius:8px;transition:box-shadow .2s}
+  .pg.playing{box-shadow:0 0 0 3px var(--pc,#1f6f54)}
+  .pg .lbl{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);margin:4px 2px}
+  .pg .lbl button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 10px;font:600 12px Inter,sans-serif;color:var(--ink);cursor:pointer}
+  .pg .img{display:block;width:100%;aspect-ratio:750/1073;background-color:#fff;background-repeat:no-repeat;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  .rfoot{max-width:620px;margin:6px auto 20px;text-align:center}
+  .rfoot p{font-size:12px;color:var(--muted)}
+
+  /* Player */
+  .player{flex:none;background:#fff;border-top:1px solid var(--line);padding:8px 12px calc(8px + var(--safe-b));box-shadow:0 -4px 14px rgba(0,0,0,.05)}
+  .prow{display:flex;align-items:center;gap:8px;max-width:620px;margin:0 auto}
+  .prow + .prow{margin-top:6px}
+  .prow select{flex:1;min-width:0;padding:7px 8px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:13px;color:var(--ink)}
+  .pbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);flex:none}
+  .pbtn.main{width:54px;height:54px;border:0;color:#fff;font-size:20px}
+  .pbtn.small{width:auto;height:34px;border-radius:10px;padding:0 10px;font:600 12px Inter,sans-serif}
+  .pbtn.on{background:#eef6f2;border-color:#bcd9cb}
+  .pstat{flex:1;min-width:0;font-size:12px;color:var(--muted);line-height:1.3;text-align:center}
+  .pstat b{display:block;color:var(--ink);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .toast{position:fixed;left:50%;bottom:calc(150px + var(--safe-b));transform:translateX(-50%);background:#1d2a24;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;z-index:80;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90vw;text-align:center}
+  .toast.show{opacity:.95}
+  #installCard{display:none}
+  @media (max-width:420px){.sess{grid-template-columns:1fr}.stats b{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="ar">خَتْمُ القُرْآن</p>
+    <h1>60-Day Quran Khatm</h1>
+    <p class="sub">604 pages · ½ juz (1 hizb) a day · two sittings</p>
+  </header>
+
+  <div class="card">
+    <div class="stats">
+      <div><b id="sPages">0</b><span>pages read</span></div>
+      <div><b id="sDays">0 / 60</b><span>days complete</span></div>
+      <div><b id="sPct">0%</b><span>of the Quran</span></div>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+  </div>
+
+  <div class="card next" id="nextBox"></div>
+
+  <div class="card" id="installCard">
+    <h2>📲 Install on your phone</h2>
+    <p class="sub" id="installText"></p>
+    <div class="btnrow"><button class="btn" id="installBtn" hidden>Install app</button></div>
+  </div>
+
+  <div class="card">
+    <h2>🎧 Listening</h2>
+    <div class="field"><span>Reciter</span><select id="setReciter" aria-label="Reciter"></select></div>
+    <div class="field"><span>Speed</span><select id="setSpeed" aria-label="Playback speed"><option value="0.75">0.75×</option><option value="1">1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option></select></div>
+    <div class="field"><span>Follow the reciter page by page</span><label class="switch"><input type="checkbox" id="setFollow"><span></span></label></div>
+    <div class="field"><span>Play Bismillah before each surah</span><label class="switch"><input type="checkbox" id="setBasmala"><span></span></label></div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button data-f="all" class="on">All days</button>
+    <button data-f="todo">Not finished</button>
+    <button data-f="done">Finished</button>
+  </div>
+  <div id="list"></div>
+
+  <div class="card">
+    <ul class="how">
+      <li>Day 1 to Day 60, half a juz a day. Sitting 1 (1:00 PM) covers the first half of the day's pages, and sitting 2 (6:30 PM) covers the rest.</li>
+      <li>Tap <b>Read &amp; listen</b> or any page number to open the mushaf. Press ▶ to hear the recitation; the pages follow along.</li>
+      <li>When you finish a sitting, tap <b>Mark sitting done</b>, or tick it in the list.</li>
+      <li>Your progress is saved on this device.</li>
+    </ul>
+    <div class="btnrow"><button class="btn ghost" id="resetBtn">Reset all progress</button></div>
+  </div>
+  <p class="note">Audio: verse-by-verse recitations from the Al Quran Cloud API (alquran.cloud).<br>Page images: the 604-page Madani mushaf.</p>
+</div>
+
+<div id="reader" role="dialog" aria-modal="true" aria-label="Quran reader">
+  <div class="rhead" id="rhead">
+    <div class="rt"><b id="rTitle"></b><span id="rSub"></span></div>
+    <button id="rClose" aria-label="Close reader">✕</button>
+  </div>
+  <div class="rbody" id="rbody"></div>
+  <div class="player" id="player">
+    <div class="prow">
+      <select id="pReciter" aria-label="Reciter"></select>
+      <button class="pbtn small" id="pSpeed" aria-label="Playback speed">1×</button>
+      <button class="pbtn small" id="pRepeat" aria-label="Repeat verse" title="Repeat the current verse">🔁 1</button>
+    </div>
+    <div class="prow">
+      <button class="pbtn" id="pPrev" aria-label="Previous verse">⏮</button>
+      <div class="pstat" id="pStat"><b>Press ▶ to listen</b><span id="pSub">&nbsp;</span></div>
+      <button class="pbtn main" id="pPlay" aria-label="Play">▶</button>
+      <div class="pstat" id="pPos"><b id="pCount">&nbsp;</b><span id="pPage">&nbsp;</span></div>
+      <button class="pbtn" id="pNext" aria-label="Next verse">⏭</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<audio id="audio" preload="auto"></audio>
+<audio id="preload" preload="auto" muted></audio>
+
+<script src="app.js"></script>
+</body>
+</html>
